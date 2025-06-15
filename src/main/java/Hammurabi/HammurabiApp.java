@@ -14,10 +14,34 @@ public class HammurabiApp {
         int bushels = 2800;
         int acresOwned = 1000;
         int price = 19 ;
-        int year = 0;
+        int year = 1;
+        int peopleStarved = 0;
+        int immigration = 5;
+        int plagueDeaths = 0;
+        int bushelsHarvested = 3000;
+        int bushelsDestroyedByRats = 200;
 
-        while (year <= 10){
+        while (year <= 10) {
+            printSummary(year, peopleStarved, immigration, population, bushelsHarvested, bushelsDestroyedByRats, bushels, acresOwned, price);
+            int acresBought = askHowManyAcresToBuy(price, bushels);
+            int acresSold;
 
+            //This will allow user to either input a purchase or a sale. But, not both. One or the other happens.
+            if (acresBought > 0) {
+                acresOwned += acresBought;
+                bushels -= acresBought * price;
+            } else {
+                //Acres sold
+                acresSold =  askHowManyAcresToSell(acresOwned);
+                acresOwned -= acresSold;
+                bushels += acresSold * price;
+            }
+
+
+//            askHowMuchGrainToFeedPeople(bushels);
+//            askHowManyAcresToPlant(acresOwned, population, bushels);
+            price = newCostOfLand();
+            year++;
         }
     }
 
@@ -26,10 +50,11 @@ public class HammurabiApp {
         while (true) {
             System.out.print(message);
             try {
-                 if (scanner.nextInt() < 0){
+                int input = scanner.nextInt();
+                 if (input < 0){
                      System.out.println("Invalid input! Please enter a non-negative number.");
                  } else {
-                     return scanner.nextInt();
+                     return input;
                  }
             }
             catch (InputMismatchException e) {
@@ -40,38 +65,36 @@ public class HammurabiApp {
 
     int askHowManyAcresToBuy(int price, int bushels) {
         //User Input
-        int buy = getNumber("O great Hammurabi, how many acres shall you buy?");
-
+        int buy;
         //Calculated Bushels after purchase
-        int bushelsRemaining = bushels - (price * buy);
 
-        //Program checks if user inputted more than 0
-        if (buy >= 0) {
-            if (bushelsRemaining < 0) {
-                throw new ArithmeticException("Remaining bushels cannot be lower than zero!!");
+        while(true) {
+            buy = getNumber("\nO great Hammurabi, how many acres shall you buy?\n");
+            //Program checks if user inputted more than 0
+
+            if (buy * price > bushels) {
+                System.out.println("Not enough bushels! Please input a lower amount.\n");
             } else {
-                //Returns what the user inputted. Then will affect the bushels left and in
                 return buy;
             }
         }
-        return 0;
     }
 
     int askHowManyAcresToSell(int acresOwned){
         //User Input
-        int sell = getNumber("O great Hammurabi, how many acres shall you sell?");
+        int sell;
 
-        int acresRemaining = acresOwned - sell;
-        if (sell > 0) {
-            if (acresRemaining <= 0) {
-                throw new ArithmeticException("We cannot sell all of our land O great one!");
+        while (true) {
+            sell = getNumber("O great Hammurabi, how many acres shall you sell?\n");
+            if (sell > acresOwned) {
+                System.out.println("\nYou don't own that many acres! Please enter another amount.\n");
             } else {
                 //Return User Input assuming all conditions are true. This will add to bushels Hammurabi will have.
                 return sell;
             }
         }
-        return 0;
     }
+
 
     int askHowMuchGrainToFeedPeople(int bushels){
         int feedPeople = getNumber("O great Hammurabi, how many grains of bushels shall you feed the people?");
@@ -144,7 +167,17 @@ public class HammurabiApp {
         return newPrice;
     }
 
-    void printSummary(){}
+    void printSummary(int year, int peopleStarved, int immigration, int population, int bushelsHarvested, int bushelsDestroyedByRats, int bushels, int acresOwned, int price){
+        System.out.println("O great Hammurabi!\n" +
+                "You are in year " + year +  " of your ten year rule.\n" +
+                "In the previous year " + peopleStarved + " people starved to death.\n" +
+                "In the previous year " + immigration + " people entered the kingdom.\n" +
+                "The population is now " + population + ".\n" +
+                "We harvested " + bushelsHarvested + " bushels at 2 bushels per acre.\n" +
+                "Rats destroyed " + bushelsDestroyedByRats + " bushels, leaving " + bushels + " bushels in storage.\n" +
+                "The city owns " + acresOwned + " acres of land.\n" +
+                "Land is currently worth " + price + " bushels per acre.");
+    }
 
     void finalSummary(){}
 
