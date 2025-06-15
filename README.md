@@ -25,7 +25,8 @@ There is NO `pom.xml` file in this repo. You need to add that. Use `vscode` or `
 Define a single class named `Hammurabi`. Use the following skeleton (but leave out the `//` comments):
 
 ```java
-package hammurabi;               // package declaration 
+package Hammurabi;               // package declaration 
+
 import java.util.Random;         // imports go here
 import java.util.Scanner;
 
@@ -33,7 +34,7 @@ public class Hammurabi {         // must save in a file named Hammurabi.java
     Random rand = new Random();  // this is an instance variable
     Scanner scanner = new Scanner(System.in);
 
-    public static void main(String\[\] args) { // required in every Java program
+    public static void main(String\[\]args) { // required in every Java program
         new Hammurabi().playGame();
     }
 
@@ -208,7 +209,7 @@ Here is an example of how you can use this method:
 ### Structure of the solution
 
 *   Project name: `Hammurabi`
-*   Package name: `hammurabi`
+*   Package name: `Hammurabi`
 *   Class names and method signatures:
     *   `class Hammurabi`
         *   `public static void main(String[] args)`
