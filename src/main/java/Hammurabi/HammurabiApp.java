@@ -26,10 +26,14 @@ public class HammurabiApp {
         while (true) {
             System.out.print(message);
             try {
-                return scanner.nextInt();
+                 if (scanner.nextInt() < 0){
+                     System.out.println("Invalid input! Please enter a non-negative number.");
+                 } else {
+                     return scanner.nextInt();
+                 }
             }
             catch (InputMismatchException e) {
-                System.out.println("\"" + scanner.next() + "\" isn't a number!");
+                System.out.println("\"" + scanner.next() + "\" isn't a number! Please enter a valid number.");
             }
         }
     }
@@ -42,7 +46,7 @@ public class HammurabiApp {
         int bushelsRemaining = bushels - (price * buy);
 
         //Program checks if user inputted more than 0
-        if (buy > 0) {
+        if (buy >= 0) {
             if (bushelsRemaining < 0) {
                 throw new ArithmeticException("Remaining bushels cannot be lower than zero!!");
             } else {
@@ -50,7 +54,6 @@ public class HammurabiApp {
                 return buy;
             }
         }
-        //If user inputs 0, then return 0
         return 0;
     }
 
@@ -76,10 +79,6 @@ public class HammurabiApp {
         //Difference between what user inputs and what's left as a result
         int bushelsRemaining = bushels - feedPeople;
 
-        //Have to make sure user can't input less than 0 for bushels they want to feed the people
-        if(feedPeople < 0){
-            throw new ArithmeticException("You cannot input a negative number! Try again.");
-        } else{
             //Must make sure bushels remaining does not go below 0. Even though the Emperor will be obviously overthrown.
             if (bushelsRemaining < 0){
                 throw new ArithmeticException("You cannot have less than 0 bushels remaining! Try again!");
@@ -88,10 +87,8 @@ public class HammurabiApp {
             return feedPeople;
         }
 
-    }
-
     int askHowManyAcresToPlant(int acresOwned, int population, int bushels){
-        //User input
+        //User Input
         int acresToPlant = getNumber("O great Hammurabi, how many acres of land will you plant?");
 
         //I think I need to make a Map of people that have a range of 0-10 to be able to plant acres based on what user can input.
@@ -115,7 +112,7 @@ public class HammurabiApp {
 
         /*If the sum of acres produced surpasses or is equal to what user inputs, AND there's the bushels to do the work
         then we can return what the user inputs without errors. Both conditions must be true*/
-        if(acresToPlant <= sumOfAcresProducedFromEachPerson) {
+        if(acresToPlant <= sumOfAcresProducedFromEachPerson && acresToPlant <= acresOwned) {
             if (bushels >= (acresToPlant * 2)) {
                 //This would mean I need to subract what is returned * 2 for the bushels AND, I need to add to acres.
                 return acresToPlant;
@@ -142,6 +139,7 @@ public class HammurabiApp {
 //    int grainEatenByRats(int bushels)
 
     public int newCostOfLand(){
+        //Test passed.
         int min = 17, max = 23;
         int newPrice =  rand.nextInt(max - min + 1) + min;
         return newPrice;
