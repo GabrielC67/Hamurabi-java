@@ -20,13 +20,18 @@ public class HammurabiApp {
         int plagueDeaths = 0;
         int bushelsHarvested = 3000;
         int bushelsDestroyedByRats = 200;
+        int bushelsFedToPeople = 0;
 
         while (year <= 10) {
+            
+
             printSummary(year, peopleStarved, immigration, population, bushelsHarvested, bushelsDestroyedByRats, bushels, acresOwned, price);
-            int acresBought = askHowManyAcresToBuy(price, bushels);
-            int acresSold;
+            
 
             //This will allow user to either input a purchase or a sale. But, not both. One or the other happens.
+            int acresBought = askHowManyAcresToBuy(price, bushels);
+            int acresSold;
+            int acresToPlant;
             if (acresBought > 0) {
                 acresOwned += acresBought;
                 bushels -= acresBought * price;
@@ -37,9 +42,13 @@ public class HammurabiApp {
                 bushels += acresSold * price;
             }
 
+            bushelsFedToPeople = askHowMuchGrainToFeedPeople(bushels);
+            bushels = bushels - bushelsFedToPeople;
+            peopleStarved = starvationDeaths(population, bushelsFedToPeople);
+            population = population - peopleStarved;
 
-//            askHowMuchGrainToFeedPeople(bushels);
-//            askHowManyAcresToPlant(acresOwned, population, bushels);
+            acresToPlant = askHowManyAcresToPlant(acresOwned, population, bushels);
+            bushelsHarvested = harvest(acresToPlant);
             price = newCostOfLand();
             year++;
         }
@@ -63,7 +72,7 @@ public class HammurabiApp {
         }
     }
 
-    int askHowManyAcresToBuy(int price, int bushels) {
+    public int askHowManyAcresToBuy(int price, int bushels) {
         //User Input
         int buy;
         //Calculated Bushels after purchase
@@ -73,19 +82,19 @@ public class HammurabiApp {
             //Program checks if user inputted more than 0
 
             if (buy * price > bushels) {
-                System.out.println("Not enough bushels! Please input a lower amount.\n");
+                System.out.println("\nNot enough bushels! Please input a lower amount.\n");
             } else {
                 return buy;
             }
         }
     }
 
-    int askHowManyAcresToSell(int acresOwned){
+    public int askHowManyAcresToSell(int acresOwned){
         //User Input
         int sell;
 
         while (true) {
-            sell = getNumber("O great Hammurabi, how many acres shall you sell?\n");
+            sell = getNumber("\nO great Hammurabi, how many acres shall you sell?\n");
             if (sell > acresOwned) {
                 System.out.println("\nYou don't own that many acres! Please enter another amount.\n");
             } else {
@@ -96,25 +105,27 @@ public class HammurabiApp {
     }
 
 
-    int askHowMuchGrainToFeedPeople(int bushels){
-        int feedPeople = getNumber("O great Hammurabi, how many grains of bushels shall you feed the people?");
+    public int askHowMuchGrainToFeedPeople(int bushels) {
+        int feedPeople;
 
         //Difference between what user inputs and what's left as a result
-        int bushelsRemaining = bushels - feedPeople;
-
+        while (true) {
+            feedPeople = getNumber("\nO great Hammurabi, how many grains of bushels shall you feed the people?\n");
             //Must make sure bushels remaining does not go below 0. Even though the Emperor will be obviously overthrown.
-            if (bushelsRemaining < 0){
-                throw new ArithmeticException("You cannot have less than 0 bushels remaining! Try again!");
+            if (bushels < 0) {
+                System.out.println("\nYou don't have that many bushels to feed people. Please input a more reasonable number.\n");
+            } else {
+                //This will return what the user inputs, then will compute the initialized variable.
+                return feedPeople;
             }
-            //This will return what the user inputs, then will compute the initialized variable.
-            return feedPeople;
         }
+    }
 
-    int askHowManyAcresToPlant(int acresOwned, int population, int bushels) {
+    public int askHowManyAcresToPlant(int acresOwned, int population, int bushels) {
         //This loop is to allow the user to re-input another number should there be not enough bushels.
         while (true) {
             try {
-                int acresToPlant = getNumber("O great Hammurabi, how many acres of land will you plant?");
+                int acresToPlant = getNumber("\nO great Hammurabi, how many acres of land will you plant?\n");
                 //I think I need to make a Map of people that have a range of 0-10 to be able to plant acres based on what user can input.
                 Map<Integer, Integer> individualPersonList = new HashMap<>();
 
@@ -150,13 +161,26 @@ public class HammurabiApp {
 
 //    int plagueDeaths(int population)
 //
-//    int starvationDeaths(int population, int bushelsFedToPeople)
+    public int starvationDeaths(int population, int bushelsFedToPeople){
+        int bushelsNeeded = population * 20;
+        if (bushelsFedToPeople >= bushelsNeeded){
+            return 0;
+        }
+        //In this case, for the test to pass, I need to change the equation to a double first, then (type) cast it back to an int.
+        int peopleStarved = (int) Math.ceil((bushelsNeeded - bushelsFedToPeople) / 20.0);
+        return peopleStarved;
+    }
 //
 //    boolean uprising(int population, int howManyPeopleStarved)
 //
 //    int immigrants(int population, int acresOwned, int grainInStorage)
 
-//    int harvest(int acres, int bushelsUsedAsSeed)
+    public int harvest(int acres){
+        int bushelsUsedAsSeed;
+        int min = 1, max = 6;
+        bushelsUsedAsSeed = (rand.nextInt(max - min + 1) + min) * acres;
+        return bushelsUsedAsSeed;
+    }
 
 //    int grainEatenByRats(int bushels)
 

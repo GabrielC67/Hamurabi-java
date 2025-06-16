@@ -44,15 +44,15 @@ public class HammurabiTest {
 //                     50, deaths);
 //    }
 //
-//    @Test
-//    public final void testStarvationDeaths() {
-//        int deaths = ham.starvationDeaths(100, 1639);
-//        assertEquals("Wrong number of starvations deaths.", 19, deaths);
-//        deaths = ham.starvationDeaths(100, 2500);
-//        if (deaths < 0) {
-//            fail("You starved a negative number of people!");
-//        }
-//    }
+    @Test
+    public final void testStarvationDeaths() {
+        int deaths = ham.starvationDeaths(100, 1639);
+        assertEquals("Wrong number of starvations deaths.", 19, deaths);
+        deaths = ham.starvationDeaths(100, 2500);
+        if (deaths < 0) {
+            fail("You starved a negative number of people!");
+        }
+    }
 //
 //    @Test
 //    public final void testUprising() {
@@ -66,18 +66,18 @@ public class HammurabiTest {
 //        assertEquals("Wrong number of immigrants.", 25, imm);
 //    }
 //
-//    @Test
-//    public final void testHarvest() {
-//        int[] yield = new int[7];
-//        for (int i = 0; i < 1000; i++) {
-//            int harvest = ham.harvest(1);
-//            assertTrue("Illegal harvest per acre: " + harvest, harvest > 0 && harvest <= 6);
-//            yield[harvest] += 1;
-//        }
-//        for (int j = 1; j <= 6; j++) {
-//            assertTrue("You never have a yield of " + j + " bushels per acre.", yield[j] > 0);
-//        }
-//    }
+    @Test
+    public final void testHarvest() {
+        int[] yield = new int[7];
+        for (int i = 0; i < 1000; i++) {
+            int harvest = ham.harvest(1);
+            assertTrue("Illegal harvest per acre: " + harvest, harvest > 0 && harvest <= 6);
+            yield[harvest] += 1;
+        }
+        for (int j = 1; j <= 6; j++) {
+            assertTrue("You never have a yield of " + j + " bushels per acre.", yield[j] > 0);
+        }
+    }
 //
 //    @Test
 //    public final void testGrainEatenByRats1() {
