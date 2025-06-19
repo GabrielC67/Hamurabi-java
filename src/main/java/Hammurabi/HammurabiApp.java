@@ -7,9 +7,11 @@ public class HammurabiApp {
 
     public static void main(String[] args){
         new HammurabiApp().playGame();
+
     }
 
     void playGame(){
+
         int population = 100;
         int bushels = 2800;
         int acresOwned = 1000;
@@ -23,10 +25,7 @@ public class HammurabiApp {
         int bushelsFedToPeople = 0;
 
         while (year <= 10) {
-            
-
             printSummary(year, peopleStarved, immigration, population, bushelsHarvested, bushelsDestroyedByRats, bushels, acresOwned, price);
-            
 
             //This will allow user to either input a purchase or a sale. But, not both. One or the other happens.
             int acresBought = askHowManyAcresToBuy(price, bushels);
@@ -47,11 +46,27 @@ public class HammurabiApp {
             peopleStarved = starvationDeaths(population, bushelsFedToPeople);
             population = population - peopleStarved;
 
+            plagueDeaths = plagueDeaths(population);
+            population = population - plagueDeaths;
+
             acresToPlant = askHowManyAcresToPlant(acresOwned, population, bushels);
             bushelsHarvested = harvest(acresToPlant);
+
+
+            if(uprising(population, peopleStarved)){
+                System.out.println("Many people have starved O great Hammurabi and the people are having" +
+                        "an uprising!! You are removed from the office!");
+                break;
+            } else if ((!uprising(population, peopleStarved)) && peopleStarved > Math.round((double) population * 0.15)) {
+                System.out.println("O great Hammurabi, people are starving in the city. People are not" +
+                        "going to want to come and live in our city!");
+            }
+
+
             price = newCostOfLand();
             year++;
         }
+
     }
 
 
@@ -159,8 +174,14 @@ public class HammurabiApp {
     }
 
 
-//    int plagueDeaths(int population)
-//
+    public int plagueDeaths(int population){
+        boolean plague = (rand.nextInt(100) < 15);
+        if (plague){
+            return (population/2);
+        }
+        return 0;
+    }
+
     public int starvationDeaths(int population, int bushelsFedToPeople){
         int bushelsNeeded = population * 20;
         if (bushelsFedToPeople >= bushelsNeeded){
@@ -170,10 +191,18 @@ public class HammurabiApp {
         int peopleStarved = (int) Math.ceil((bushelsNeeded - bushelsFedToPeople) / 20.0);
         return peopleStarved;
     }
-//
-//    boolean uprising(int population, int howManyPeopleStarved)
-//
-//    int immigrants(int population, int acresOwned, int grainInStorage)
+
+    public boolean uprising(int population, int howManyPeopleStarved){
+        if (howManyPeopleStarved > Math.round((double) population * 0.45)){
+            return true;
+        }
+        return false;
+    }
+
+    public int immigrants(int population, int acresOwned, int grainInStorage){
+        int immigration = ((20 * acresOwned) + grainInStorage) / (100 * population) + 1;
+        return immigration;
+    }
 
     public int harvest(int acres){
         int bushelsUsedAsSeed;
@@ -182,7 +211,15 @@ public class HammurabiApp {
         return bushelsUsedAsSeed;
     }
 
-//    int grainEatenByRats(int bushels)
+    public int grainEatenByRats(int bushels){
+        boolean ratInfestation = (rand.nextInt(100) < 40);
+        if (ratInfestation){
+            int min = 10; int max = 30;
+            double bushelsEaten = getRandomPercentageRange(min, max);
+            return ((int) bushelsEaten);
+        }
+        return 0;
+    }
 
     public int newCostOfLand(){
         //Test passed.
@@ -205,4 +242,8 @@ public class HammurabiApp {
 
     void finalSummary(){}
 
+    double getRandomPercentageRange(int min, int max){
+        Random rand = new Random();
+        return rand.nextInt((max - min) + 1) + min;
+    }
 }
