@@ -57,7 +57,7 @@ public class Hammurabi {
             if (acresToPlant > 0) {
                 bushels = bushels - (acresToPlant * 2); // Cost of Planting Acres
 
-                //Result of acres planted by the population
+                //Result of the Harvest
                 bushelsHarvested = harvest(acresToPlant, (acresToPlant * 2));
                 bushels = bushels + bushelsHarvested;
                 getSanityCheck(bushels);
@@ -68,7 +68,7 @@ public class Hammurabi {
             if (plagueDeaths > 0) {
                 population -= plagueDeaths;
                 System.out.println("Oh No!! A plague has happened and half of the population has died!! You now have " +
-                        population + " of people left as a result O Great One!!");
+                        population + " people left as a result O Great One!!");
             }
 
             //People starved
@@ -87,8 +87,8 @@ public class Hammurabi {
             bushelsDestroyedByRats = grainEatenByRats(bushels);
             if(bushelsDestroyedByRats > 0){
                 bushels -= bushelsDestroyedByRats;
-                System.out.println("There is a rat infestation! As a result, " + bushelsDestroyedByRats + " were eaten!" +
-                        " You now have " + bushels + " remaining in storage at this time.");
+                System.out.println("Oh no!! There is a rat infestation!! As a result, " + bushelsDestroyedByRats + " bushels were eaten!" +
+                        " You now have " + bushels + " bushels remaining in storage at this time.");
 
             }
 
@@ -225,7 +225,7 @@ public class Hammurabi {
 
     public int plagueDeaths(int population) {
         boolean plague = (rand.nextInt(100) < 15);
-        System.out.println("\n Debugging plague: " + plague);
+//        System.out.println("\n Debugging plague: " + plague);
         if (plague) {
             return (population / 2);
         }
@@ -261,8 +261,9 @@ public class Hammurabi {
     }
 
     public int grainEatenByRats(int bushels) {
-        boolean ratInfestation = (rand.nextInt(100) < 40);
-        System.out.println("\n Debugging rat infestation: " + ratInfestation + "\n");
+        boolean ratInfestation = false;
+        ratInfestation = (rand.nextInt(100) < 40);
+//        System.out.println("\n Debugging rat infestation: " + ratInfestation + "\n");
         if (ratInfestation) {
             int min = 10;
             int max = 30;
