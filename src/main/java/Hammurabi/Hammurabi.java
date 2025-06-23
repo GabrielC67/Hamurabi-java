@@ -5,9 +5,10 @@ public class Hammurabi {
     Random rand = new Random();
     Scanner scanner = new Scanner(System.in);
 
+
     public static void main(String[] args) {
         new Hammurabi().playGame();
-
+        Hammurabi ham = new Hammurabi();
     }
 
     void playGame() {
@@ -210,21 +211,24 @@ public class Hammurabi {
                             if (bushels >= bushelsUsed && bushels > 0) {
                                 //This would mean I need to subtract what is returned * 2 for the bushels AND, I need to add to acres.
                                 return sumOfAcresFarmed;
-                            } else {
+                            }
+                            else {
                                 System.out.println("O great one, there's not enough bushels to do this job.\n");
-                                acresToPlant = getNumber("Please enter another amount.");
+                                acresToPlant = getNumber("Please enter another amount.\n");
                                 continue;
                             }
+                        } else {
+                            return acresToPlant;
                         }
                     } else {
                         System.out.println("O great Hammurabi, there's not enough people to harvest the acres you request.\n");
-                        acresToPlant = getNumber("Please enter another amount.");
+                        acresToPlant = getNumber("Please enter another amount.\n");
                         continue;
                     }
                 } else {
                     System.out.println("There's not enough acres O great Hammurabi.\n");
-                    acresToPlant = getNumber("Please enter another amount.");
-                    continue;
+                    acresToPlant = getNumber("Please enter another amount.\n");
+
                 }
             } else {
                 return 0;
@@ -338,6 +342,15 @@ public class Hammurabi {
 
 
     void getSanityCheck(int bushelsLeft) {
-        System.out.println("\nO Great Hammurabi, surely you jest! We have " + bushelsLeft + " bushels remaining!\n");
+        StringBuilder sb = new StringBuilder();
+        sb.append("\nO Great Hammurabi, surely you jest! We have " + bushelsLeft + " bushels remaining!\n");
+        if (bushelsLeft <= 0){
+            sb.append("You have poorly managed our inventory Hammurabi! You are EXILED!");
+            System.out.println(sb);
+            System.exit(0);
+        } else if (bushelsLeft <= 1350){
+            sb.append("\nWe don't have many bushels remaining O Great One! Please be cautious of your decisions!\n");
+        }
+        System.out.println(sb);
     }
 }
