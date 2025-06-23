@@ -32,7 +32,7 @@ public class Hammurabi {
             //This will allow user to either input a purchase or a sale. But, not both. One or the other happens.
             int acresBought = askHowManyAcresToBuy(price, bushels);
             int acresSold;
-            int acresToPlant;
+            int acresPlanted;
             if (acresBought > 0) {
                 acresOwned += acresBought;
                 bushels -= (acresBought * price);
@@ -53,12 +53,12 @@ public class Hammurabi {
                 getSanityCheck(bushels);
             }
             //Acres to plant
-            acresToPlant = askHowManyAcresToPlant(acresOwned, population, bushels);
-            if (acresToPlant > 0) {
-                bushels = bushels - (acresToPlant * 2); // Cost of Planting Acres
+            acresPlanted = askHowManyAcresToPlant(acresOwned, population, bushels);
+            if (acresPlanted > 0) {
+                bushels = bushels - (acresPlanted * 2); // Cost of Planting Acres
 
                 //Result of the Harvest
-                bushelsHarvested = harvest(acresToPlant, (acresToPlant * 2));
+                bushelsHarvested = harvest(acresPlanted, (acresPlanted * 2));
                 bushels = bushels + bushelsHarvested;
                 getSanityCheck(bushels);
             }
@@ -68,7 +68,7 @@ public class Hammurabi {
             if (plagueDeaths > 0) {
                 population -= plagueDeaths;
                 System.out.println("Oh No!! A plague has happened and half of the population has died!! You now have " +
-                        population + " people left as a result O Great One!!");
+                        population + " people left as a result O Great One!!\n");
             }
 
             //People starved
@@ -88,7 +88,7 @@ public class Hammurabi {
             if(bushelsDestroyedByRats > 0){
                 bushels -= bushelsDestroyedByRats;
                 System.out.println("Oh no!! There is a rat infestation!! As a result, " + bushelsDestroyedByRats + " bushels were eaten!" +
-                        " You now have " + bushels + " bushels remaining in storage at this time.");
+                        " You now have " + bushels + " bushels remaining in storage at this time.\n");
 
             }
 
@@ -96,13 +96,13 @@ public class Hammurabi {
             if (uprising(population, peopleStarved)) {
                 System.out.println("\nMany people have starved O great Hammurabi and the people are having" +
                         " an uprising!! You have been removed from the office!");
-                break;
             } else if ((!uprising(population, peopleStarved)) && peopleStarved > Math.round((double) population * 0.15)) {
                 System.out.println("\nO great Hammurabi, people are starving in the city. People are not" +
                         "going to want to come and live in our city!\n");
-            } else {
-                continue;
             }
+//            else {
+//                continue;
+//            }
 
 
             price = newCostOfLand();
@@ -130,15 +130,14 @@ public class Hammurabi {
 
     public int askHowManyAcresToBuy(int price, int bushels) {
         //User Input
-        int buy;
+        int buy = getNumber("\nO great Hammurabi, how many acres shall you buy?\n");
         //Calculated Bushels after purchase
 
         while (true) {
-            buy = getNumber("\nO great Hammurabi, how many acres shall you buy?\n");
             //Program checks if user inputted more than 0
-
             if (buy * price > bushels) {
-                System.out.println("\nNot enough bushels! Please input a lower amount.\n");
+                System.out.println("\nO Great one, There's not enough bushels to purchase the amount of land you want!\n");
+                buy = getNumber("Please input a lower amount of acres to purchase.\n");
             } else {
                 return buy;
             }
@@ -147,12 +146,12 @@ public class Hammurabi {
 
     public int askHowManyAcresToSell(int acresOwned) {
         //User Input
-        int sell;
+        int sell = getNumber("\nO great Hammurabi, how many acres shall you sell?\n");
 
         while (true) {
-            sell = getNumber("\nO great Hammurabi, how many acres shall you sell?\n");
             if (sell > acresOwned) {
-                System.out.println("\nYou don't own that many acres! Please enter another amount.\n");
+                System.out.println("\nO Great One, Surely you don't own that many acres to sell off!\n");
+                sell = getNumber("Please enter another amount of acres to sell.\n");
             } else {
                 //Return User Input assuming all conditions are true. This will add to bushels Hammurabi will have.
                 return sell;
@@ -162,14 +161,14 @@ public class Hammurabi {
 
 
     public int askHowMuchGrainToFeedPeople(int bushels) {
-        int feedPeople;
+        int feedPeople = getNumber("\nO great Hammurabi, how many grains of bushels shall you feed the people?\n");;
 
         //Difference between what user inputs and what's left as a result
         while (true) {
-            feedPeople = getNumber("\nO great Hammurabi, how many grains of bushels shall you feed the people?\n");
             //Must make sure bushels remaining does not go below 0. Even though the Emperor will be obviously overthrown.
-            if (bushels < 0) {
-                System.out.println("\nYou don't have that many bushels to feed people. Please input a more reasonable number.\n");
+            if (bushels < feedPeople) {
+                System.out.println("\nYou don't have that many bushels to feed people.\n");
+                feedPeople = getNumber("Please input a more reasonable number.\n");
             } else {
                 //This will return what the user inputs, then will compute the initialized variable.
                 return feedPeople;
@@ -178,8 +177,9 @@ public class Hammurabi {
     }
 
     public int askHowManyAcresToPlant(int acresOwned, int population, int bushels) {
+        int acresToPlant = getNumber("\nO great Hammurabi, how many acres of land will you plant?\n");
+
         while (true) {
-            int acresToPlant = getNumber("\nO great Hammurabi, how many acres of land will you plant?\n");
             //This checks if there's enough acres to plant.
             if (acresToPlant <= acresOwned) {
                 //This checks if there's enough people to do the job
@@ -197,27 +197,30 @@ public class Hammurabi {
                     }
 
                     //This sums up the total acres farmed from each person.
-                    int sumOfAcresFarmedFromEachPerson = 0;
+                    int sumOfAcresFarmed = 0;
                     for (int numberOfAcresProduced : individualPersonList.values()) {
-                        sumOfAcresFarmedFromEachPerson += numberOfAcresProduced;
+                        sumOfAcresFarmed += numberOfAcresProduced;
                     }
 
                         /*If the sum of acres produced surpasses or is equal to what user inputs, AND there's the bushels to do the work
-                        then we can return what the user inputs without errors. Both conditions must be true*/
-                    int bushelsUsed = sumOfAcresFarmedFromEachPerson * 2;
-                    if (acresToPlant <= sumOfAcresFarmedFromEachPerson) {
-                        if (bushels >= bushelsUsed) {
+        1                then we can return what the user inputs without errors. Both conditions must be true*/
+                    int bushelsUsed = sumOfAcresFarmed * 2;
+                    if (acresToPlant >= sumOfAcresFarmed) {
+                        if (bushels >= bushelsUsed && bushels > 0) {
                             //This would mean I need to subtract what is returned * 2 for the bushels AND, I need to add to acres.
-                            return sumOfAcresFarmedFromEachPerson;
+                            return sumOfAcresFarmed;
+                        } else {
+                            System.out.println("O great one, there's not enough bushels to do this job.\n");
+                            acresToPlant = getNumber("Please enter another amount.");
                         }
-                    } else {
-                        System.out.println("O great one, there's not enough bushels to do this job. Please enter another amount.");
                     }
                 } else {
-                    System.out.println("O great Hammurabi, there's not enough people to harvest the acres you request.");
+                    System.out.println("O great Hammurabi, there's not enough people to harvest the acres you request.\n");
+                    acresToPlant = getNumber("Please enter another amount.");
                 }
             } else {
-                System.out.println("There's not enough acres O great Hammurabi. Please input another number.");
+                System.out.println("There's not enough acres O great Hammurabi.\n");
+                acresToPlant = getNumber("Please enter another amount.");
             }
         }
     }
