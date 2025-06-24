@@ -281,7 +281,7 @@ public class Hammurabi {
         if (ratInfestation) {
             int min = 10;
             int max = 30;
-            double percentageBushelsEaten = ((rand.nextInt((max - min + 1) + min)) / 100.0);
+            double percentageBushelsEaten = (rand.nextInt(max - min + 1) + min) / 100.0;
             return (int) ((percentageBushelsEaten) * bushels);
         }
         return 0;
